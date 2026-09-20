@@ -1,11 +1,11 @@
-import { createClient } from '@supabase/supabase-js';
+const { createClient } = require('@supabase/supabase-js');
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_KEY
 );
 
-export default async function handler(req, res) {
+module.exports = async (req, res) => {
   // Permitir conexiones desde Roblox
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
@@ -46,8 +46,8 @@ export default async function handler(req, res) {
       return res.status(403).json({ success: false, message: 'Key usada en otro PC' });
     }
 
-    // 3. SCRIPT PRINCIPAL CODIFICADO EN BASE64
-    // Pega aquí adentro el texto largo que obtengas de base64encode.org
+    // 3. TU SCRIPT CODIFICADO EN BASE64
+    // Pega aquí adentro el resultado que te dé base64encode.org
     const myMainScriptBase64 = '--!nocheck
 -- ============================================================
 -- m1n3l1s HUB x CRIM KALETH | GUI m1n3l1s con KEY + funciones CRIM
@@ -8865,10 +8865,10 @@ end)()
 
 ';
 
-    // Se convierte de Base64 a Lua puro en el servidor
+    // Conversión automática a texto de Lua en Vercel
     const myMainScript = Buffer.from(myMainScriptBase64, 'base64').toString('utf-8');
 
-    // 4. Enviar el script decodificado a Roblox
+    // 4. Enviar el script a Roblox
     return res.status(200).json({
       success: true,
       message: 'Acceso concedido',
@@ -8878,4 +8878,4 @@ end)()
   } catch (err) {
     return res.status(500).json({ success: false, message: 'Error interno del servidor' });
   }
-}
+};
