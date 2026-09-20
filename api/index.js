@@ -8,7 +8,6 @@ const supabase = createClient(
 );
 
 module.exports = async (req, res) => {
-  // Configuración de cabeceras para Roblox
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   
@@ -38,7 +37,7 @@ module.exports = async (req, res) => {
       return res.status(403).json({ success: false, message: 'Clave desactivada' });
     }
 
-    // 2. Verificar o vincular el HWID del dispositivo
+    // 2. Vincular o verificar el HWID
     if (!keyData.hwid) {
       await supabase
         .from('keys')
@@ -48,11 +47,10 @@ module.exports = async (req, res) => {
       return res.status(403).json({ success: false, message: 'Key usada en otro PC' });
     }
 
-    // 3. Leer el script directamente desde el archivo script.lua
-    const filePath = path.join(process.cwd(), 'script.lua');
+    // 3. Leer script.lua en la misma carpeta que index.js
+    const filePath = path.join(__dirname, 'script.lua');
     const myMainScript = fs.readFileSync(filePath, 'utf8');
 
-    // 4. Enviar el script a Roblox
     return res.status(200).json({
       success: true,
       message: 'Acceso concedido',
