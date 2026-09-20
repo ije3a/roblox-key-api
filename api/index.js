@@ -8865,6 +8865,8 @@ end)
 end)()
 
 
+
+
     `;
 
     // 4. Enviar el script a Roblox
