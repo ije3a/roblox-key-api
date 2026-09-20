@@ -48,7 +48,7 @@ export default async function handler(req, res) {
 
     // 3. AQUÍ GUARDASTE TU SCRIPT PROTEGIDO
     // Este código NUNCA se enviará si la clave es falsa o no existe.
-    const myMainScript = `
+    const myMainScript = String.raw`
 --!nocheck
 -- ============================================================
 -- m1n3l1s HUB x CRIM KALETH | GUI m1n3l1s con KEY + funciones CRIM
