@@ -46,10 +46,9 @@ export default async function handler(req, res) {
       return res.status(403).json({ success: false, message: 'Key usada en otro PC' });
     }
 
-    // 3. AQUÍ GUARDASTE TU SCRIPT PROTEGIDO
-    // Este código NUNCA se enviará si la clave es falsa o no existe.
-    const myMainScript = String.raw`
---!nocheck
+    // 3. SCRIPT PRINCIPAL CODIFICADO EN BASE64
+    // Pega aquí adentro el texto largo que obtengas de base64encode.org
+    const myMainScriptBase64 = '--!nocheck
 -- ============================================================
 -- m1n3l1s HUB x CRIM KALETH | GUI m1n3l1s con KEY + funciones CRIM
 -- Generado: combinacion automatica | GUI = m1n3l1s (con key Vercel+HWID) | Funciones = crim kaleth
@@ -8864,12 +8863,12 @@ end)
 
 end)()
 
+';
 
+    // Se convierte de Base64 a Lua puro en el servidor
+    const myMainScript = Buffer.from(myMainScriptBase64, 'base64').toString('utf-8');
 
-
-    `;
-
-    // 4. Enviar el script a Roblox
+    // 4. Enviar el script decodificado a Roblox
     return res.status(200).json({
       success: true,
       message: 'Acceso concedido',
