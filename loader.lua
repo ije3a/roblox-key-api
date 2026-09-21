@@ -109,17 +109,22 @@ local function check()
     local url = api_url .. "?key=" .. HttpService:UrlEncode(k) .. "&hwid=" .. HttpService:UrlEncode(hwid)
 
     local req = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or request
-    local res
+    local responseBody = nil
 
     if req then
-        res = req({ Url = url, Method = "GET" })
+        local res = req({ Url = url, Method = "GET" })
+        if res then
+            responseBody = res.Body or res.body
+        end
     else
         local success, body = pcall(function() return game:HttpGet(url) end)
-        if success then res = { StatusCode = 200, Body = body } end
+        if success then 
+            responseBody = body 
+        end
     end
 
-    if res and (res.StatusCode == 200 or res.Status == 200) then
-        local ok, data = pcall(function() return HttpService:JSONDecode(res.Body) end)
+    if responseBody then
+        local ok, data = pcall(function() return HttpService:JSONDecode(responseBody) end)
         if ok and data and data.success then
             passed = true
             sub.Text = "Acceso concedido!"
@@ -138,12 +143,11 @@ local function check()
             pcall(function() gui:Destroy() end)
 
             -- ============================================================
-            -- EJECUCIÓN DIRECTA PARA COMPATIBILIDAD CON OFUSCADORES
+            -- EJECUCIÓN DIRECTA DEL SCRIPT ENCRIPTADO
             -- ============================================================
             if data.script and data.script ~= "" then
                 local func, err = loadstring(data.script)
                 if func then
-                    -- Ejecución directa en el hilo principal
                     local execSuccess, execErr = pcall(func)
                     if not execSuccess then
                         warn("[SCRIPT RUNTIME ERROR]: " .. tostring(execErr))
