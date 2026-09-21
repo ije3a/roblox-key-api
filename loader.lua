@@ -244,9 +244,16 @@ function m1n3l1s_KeySystem(titulo)
                     pcall(function() gui:Destroy() end)
                     
                     -- EJECUTA TU SCRIPT PRINCIPAL DESDE VERCEL
-                    if data.script then
-                        loadstring(data.script)()
-                    end
+    if data.script and data.script ~= "" then
+        local func, err = loadstring(data.script)
+        if func then
+            task.spawn(func)
+        else
+            warn("[LOADSTRING ERROR]: " .. tostring(err))
+        end
+    else
+        warn("[API ERROR]: La API respondio pero el script llego vacio.")
+    end
                     return
                 else
                     local msg = "Clave invalida"
